@@ -15,7 +15,15 @@ export default function SessionPage() {
   const [copyLabel, setCopyLabel] = useState("Copy");
   const [linkCopied, setLinkCopied] = useState(false);
 
-  const { state, peerCount, connected, setText, clearText } = useTextSession({
+  const {
+    state,
+    peerCount,
+    connected,
+    status,
+    errorMessage,
+    setText,
+    clearText,
+  } = useTextSession({
     room: code,
   });
 
@@ -89,11 +97,29 @@ export default function SessionPage() {
           {linkCopied ? "Link copied" : "Copy link"}
         </button>
         <span
-          className={`ml-auto text-xs ${connected ? "text-emerald-500" : "text-amber-500"}`}
+          className={`ml-auto text-xs ${
+            connected
+              ? "text-emerald-500"
+              : status === "error"
+                ? "text-red-400"
+                : "text-amber-500"
+          }`}
         >
-          {connected ? `Live · ${peerCount} device${peerCount === 1 ? "" : "s"}` : "Connecting…"}
+          {connected
+            ? `Live · ${peerCount} device${peerCount === 1 ? "" : "s"}`
+            : status === "loading"
+              ? "Loading…"
+              : status === "error"
+                ? "Offline"
+                : "Connecting…"}
         </span>
       </header>
+
+      {errorMessage && (
+        <p className="border-b border-red-900/50 bg-red-950/40 px-4 py-2 text-sm text-red-200">
+          {errorMessage}
+        </p>
+      )}
 
       <div className="flex flex-1 flex-col gap-3 p-4">
         <textarea

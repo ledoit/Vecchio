@@ -27,8 +27,10 @@ Create a session, copy the link, open it in another tab or on your phone (same W
 
 1. **PartyKit** — `pnpm party:deploy` → note host (e.g. `vecchio-party.<user>.partykit.dev`).
 2. **Vercel** — import repo, preset Next.js, `pnpm install` / `pnpm build`.
-3. Env on Vercel: `NEXT_PUBLIC_PARTYKIT_HOST=<partykit-host>` (no `https://`).
-4. Redeploy frontend after PartyKit is live.
+3. Env on Vercel (Production + Preview): `NEXT_PUBLIC_PARTYKIT_HOST=vecchio-party.ledoit.partykit.dev` (no `https://`). Optional server fallback: `PARTYKIT_HOST` with the same value.
+4. **Redeploy** the frontend after setting env — `NEXT_PUBLIC_*` is baked at build time.
+
+**Symptom:** Mac shows “Live” (local dev) but iOS/Windows stuck on “Connecting…” on the Vercel URL → env var missing; remote browsers were trying `localhost:1999`.
 
 CLI: `pnpm vercel link` then `pnpm vercel:prod`.
 

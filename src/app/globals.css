@@ -21,8 +21,112 @@ body {
   margin: 0;
   background: var(--background);
   color: var(--foreground);
+  overscroll-behavior: none;
 }
 
 body {
   font-family: var(--font-sans), system-ui, sans-serif;
+  overflow: hidden;
+}
+
+/* Room for bottom-right inset actions (~40px) + breathing room when scrolled flush */
+.session-panel {
+  --session-inset-pad: 3.25rem;
+  overflow: clip;
+}
+
+.session-panel textarea,
+.session-panel .session-scroll {
+  overscroll-behavior: none;
+}
+
+.markdown-preview {
+  color: #e7e5e4;
+  line-height: 1.65;
+  font-size: 0.9375rem;
+}
+
+.markdown-preview h1,
+.markdown-preview h2,
+.markdown-preview h3 {
+  font-weight: 600;
+  margin: 1.25em 0 0.5em;
+  color: #fafaf9;
+}
+
+.markdown-preview h1 {
+  font-size: 1.5rem;
+}
+.markdown-preview h2 {
+  font-size: 1.25rem;
+}
+.markdown-preview h3 {
+  font-size: 1.1rem;
+}
+
+.markdown-preview p {
+  margin: 0.75em 0;
+}
+
+.markdown-preview ul,
+.markdown-preview ol {
+  margin: 0.75em 0;
+  padding-left: 1.5em;
+}
+
+.markdown-preview li {
+  margin: 0.25em 0;
+}
+
+.markdown-preview code {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.875em;
+  background: #292524;
+  padding: 0.15em 0.35em;
+  border-radius: 0.25rem;
+}
+
+.markdown-preview pre {
+  margin: 1em 0;
+  padding: 1em;
+  overflow-x: auto;
+  background: #1c1917;
+  border: 1px solid #44403c;
+  border-radius: 0.5rem;
+}
+
+.markdown-preview pre code {
+  background: none;
+  padding: 0;
+}
+
+.markdown-preview blockquote {
+  margin: 1em 0;
+  padding-left: 1em;
+  border-left: 3px solid #57534e;
+  color: #a8a29e;
+}
+
+.markdown-preview a {
+  color: #d6d3d1;
+  text-decoration: underline;
+}
+
+.markdown-preview table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+}
+
+.markdown-preview th,
+.markdown-preview td {
+  border: 1px solid #44403c;
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+
+.markdown-preview hr {
+  border: none;
+  border-top: 1px solid #44403c;
+  margin: 1.5em 0;
 }

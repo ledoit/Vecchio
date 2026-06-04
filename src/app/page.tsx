@@ -15,7 +15,7 @@ export default function HomePage() {
 
   const createSession = () => {
     const code = generateSessionCode();
-    router.push(`/s/${code}`);
+    router.push(`/${code}`);
   };
 
   const joinSession = () => {
@@ -25,7 +25,7 @@ export default function HomePage() {
       return;
     }
     setError(null);
-    router.push(`/s/${code}`);
+    router.push(`/${code}`);
   };
 
   return (

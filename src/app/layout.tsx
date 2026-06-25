@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Vecchio — shared text sessions",
+  title: "Vecchio shared text session",
   description:
     "Live-synced text across your devices. Share prompts, notes, and clipboard-sized state with a short session code.",
 };

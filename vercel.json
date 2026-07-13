@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "vecchi.vercel.app" }],
+      "destination": "https://vecchio.menhir-holdings.com/:path*",
+      "permanent": true
+    }
+  ]
+}

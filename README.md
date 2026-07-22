@@ -45,3 +45,8 @@ A native menubar clip sync tool could be a future complement; it would not repla
 ## Security
 
 Sessions are **unlisted, not secret**: anyone who guesses or sees the 4-character code can read and edit. Do not put passwords or private data you would not paste into a shared doc link.
+
+
+## License
+
+All Rights Reserved © Menhir Holdings

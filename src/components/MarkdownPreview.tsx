@@ -10,7 +10,7 @@ type MarkdownPreviewProps = {
 export function MarkdownPreview({ content }: MarkdownPreviewProps) {
   if (!content.trim()) {
     return (
-      <p className="text-stone-500 italic">
+      <p className="preview-empty">
         Nothing to preview yet — paste markdown or switch to Edit.
       </p>
     );

@@ -21,9 +21,6 @@ import {
 
 type ViewMode = "edit" | "preview";
 
-const insetIconBtn =
-  "inline-flex items-center justify-center rounded-md border border-stone-600 bg-stone-800/95 p-2 text-stone-200 shadow-sm backdrop-blur hover:bg-stone-700 disabled:cursor-not-allowed disabled:opacity-40";
-
 function formatExpiry(expiresAt: number | null): string | null {
   if (expiresAt == null) return null;
   const sec = Math.max(0, Math.floor((expiresAt - Date.now()) / 1000));
@@ -168,15 +165,12 @@ export default function SessionPage() {
     setPinDraft("");
   };
 
-  const iconBtn =
-    "inline-flex items-center justify-center rounded-lg p-2 transition-colors";
-
   if (!isValidSessionCode(code)) {
     return (
-      <main className="flex h-dvh items-center justify-center overflow-hidden overscroll-none bg-stone-900 text-stone-300">
-        <div className="text-center">
-          <p>Invalid session code.</p>
-          <Link href="/" className="mt-4 inline-block text-stone-400 underline">
+      <main className="invalid">
+        <div>
+          <p>That code is not a page.</p>
+          <Link href="/" className="mt-4 inline-block">
             Home
           </Link>
         </div>
@@ -184,37 +178,34 @@ export default function SessionPage() {
     );
   }
 
+  const peerClass =
+    connected ? "peers is-live" : status === "error" ? "peers is-err" : "peers";
+  const peerLabel = connected
+    ? `${peerCount} at this page`
+    : status === "loading"
+      ? "Loading…"
+      : status === "error"
+        ? "Offline"
+        : "Connecting…";
+
   return (
-    <main className="flex h-dvh max-h-dvh flex-col overflow-hidden overscroll-none bg-stone-900">
-      <header className="flex flex-wrap items-center gap-2 border-b border-stone-700 px-4 py-3">
-        <Link
-          href="/"
-          className="text-sm font-medium text-stone-400 hover:text-stone-200"
-        >
+    <main className="flex h-dvh max-h-dvh flex-col overflow-hidden overscroll-none">
+      <header className="masthead">
+        <Link href="/" className="wordmark">
           Vecchio
         </Link>
-        <span className="font-mono text-lg tracking-widest text-stone-100">
-          {code}
-        </span>
-        {state.pinned && (
-          <span className="rounded bg-amber-900/50 px-2 py-0.5 text-xs text-amber-200">
-            Pinned
-          </span>
-        )}
+        <span className="code-mark">{code}</span>
+        {state.pinned && <span className="kept">Kept</span>}
         {expiryLabel && (
           <span
-            className="text-xs text-stone-500"
+            className="expiry"
             title={`Clears after ${IDLE_EXPIRE_MS / 60000}m with nobody connected`}
           >
             Clears in {expiryLabel}
           </span>
         )}
 
-        <button
-          type="button"
-          onClick={copyLink}
-          className="rounded-lg border border-stone-600 px-2.5 py-1 text-xs text-stone-300 hover:bg-stone-800"
-        >
+        <button type="button" onClick={copyLink} className="text-btn">
           {linkCopied ? "Link copied" : "Copy link"}
         </button>
 
@@ -222,8 +213,9 @@ export default function SessionPage() {
           type="button"
           title={state.pinned ? "Unpin (keeps on home, no auto-clear)" : "Pin to home"}
           aria-label={state.pinned ? "Unpin session" : "Pin session"}
+          aria-pressed={showPinForm}
           onClick={() => setShowPinForm((v) => !v)}
-          className={`${iconBtn} border border-stone-600 text-stone-300 hover:bg-stone-800 ${state.pinned ? "text-amber-300" : ""}`}
+          className={`icon-btn ${state.pinned ? "is-on" : ""}`}
         >
           <IconPin className="h-4 w-4" />
         </button>
@@ -242,25 +234,26 @@ export default function SessionPage() {
               value={pinDraft}
               onChange={(e) => setPinDraft(normalizePin(e.target.value))}
               placeholder={state.pinned ? "PIN" : "4-digit PIN"}
-              className="w-24 rounded-lg border border-stone-600 bg-stone-900 px-2 py-1 text-center font-mono text-sm tracking-widest text-stone-100 outline-none focus:border-stone-400"
+              className="pin-field"
             />
             <button
               type="submit"
               disabled={!isValidPin(normalizePin(pinDraft))}
-              className="rounded-lg border border-stone-600 px-2 py-1 text-xs text-stone-200 hover:bg-stone-800 disabled:opacity-40"
+              className="text-btn"
             >
-              {state.pinned ? "Unpin" : "Pin"}
+              {state.pinned ? "Unpin" : "Keep"}
             </button>
           </form>
         )}
 
-        <div className="ml-auto flex items-center gap-0.5">
+        <div className="flex items-center gap-1">
           <button
             type="button"
             title="Edit"
             aria-label="Edit"
+            aria-pressed={viewMode === "edit"}
             onClick={() => setViewMode("edit")}
-            className={`${iconBtn} ${viewMode === "edit" ? "bg-stone-600 text-stone-50" : "text-stone-400 hover:bg-stone-800"}`}
+            className={`icon-btn ${viewMode === "edit" ? "is-on" : ""}`}
           >
             <IconEdit className="h-4 w-4" />
           </button>
@@ -268,77 +261,56 @@ export default function SessionPage() {
             type="button"
             title="Preview markdown"
             aria-label="Preview markdown"
+            aria-pressed={viewMode === "preview"}
             onClick={() => setViewMode("preview")}
-            className={`${iconBtn} ${viewMode === "preview" ? "bg-stone-600 text-stone-50" : "text-stone-400 hover:bg-stone-800"}`}
+            className={`icon-btn ${viewMode === "preview" ? "is-on" : ""}`}
           >
             <IconEye className="h-4 w-4" />
           </button>
         </div>
 
-        <span
-          className={`w-full text-right text-xs sm:ml-2 sm:w-auto ${
-            connected
-              ? "text-emerald-500"
-              : status === "error"
-                ? "text-red-400"
-                : "text-amber-500"
-          }`}
-        >
-          {connected
-            ? `Live · ${peerCount} device${peerCount === 1 ? "" : "s"}`
-            : status === "loading"
-              ? "Loading…"
-              : status === "error"
-                ? "Offline"
-                : "Connecting…"}
-        </span>
+        <span className={peerClass}>{peerLabel}</span>
       </header>
 
-      {errorMessage && (
-        <p className="border-b border-red-900/50 bg-red-950/40 px-4 py-2 text-sm text-red-200">
-          {errorMessage}
-        </p>
-      )}
+      {errorMessage && <p className="banner-err">{errorMessage}</p>}
 
       {locked ? (
-        <div className="flex flex-1 flex-col items-center justify-center gap-4 p-6">
-          <p className="text-stone-300">
-            This session is pinned. Enter the 4-digit PIN to continue.
-          </p>
-          <form
-            onSubmit={onUnlockSubmit}
-            className="flex w-full max-w-xs flex-col gap-3"
-          >
-            <input
-              ref={unlockInputRef}
-              type="password"
-              inputMode="numeric"
-              autoComplete="one-time-code"
-              maxLength={4}
-              value={unlockPin}
-              onChange={(e) => setUnlockPin(normalizePin(e.target.value))}
-              placeholder="••••"
-              className="rounded-lg border border-stone-600 bg-stone-950 px-4 py-3 text-center font-mono text-2xl tracking-[0.5em] text-stone-100 outline-none focus:border-stone-400"
-            />
-            <button
-              type="submit"
-              className="rounded-lg bg-stone-600 py-2.5 font-medium text-stone-50 hover:bg-stone-500"
-            >
-              Unlock
-            </button>
-          </form>
+        <div className="unlock">
+          <div className="unlock-card">
+            <p className="kicker">Kept page</p>
+            <p className="join-lead">
+              Enter the 4-digit PIN to continue. Anyone with the code still needs
+              the PIN once a page is kept.
+            </p>
+            <form onSubmit={onUnlockSubmit} className="mt-4 flex flex-col gap-3">
+              <input
+                ref={unlockInputRef}
+                type="password"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                maxLength={4}
+                value={unlockPin}
+                onChange={(e) => setUnlockPin(normalizePin(e.target.value))}
+                placeholder="••••"
+                className="field pin-input"
+              />
+              <button type="submit" className="btn-ink w-full py-2.5">
+                Unlock
+              </button>
+            </form>
+          </div>
         </div>
       ) : (
-        <div className="flex min-h-0 flex-1 flex-col p-4">
-          <div className="session-panel relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-stone-600 bg-stone-950">
-            <div className="absolute bottom-3 right-3 z-10 flex gap-1.5">
+        <div className="flex min-h-0 flex-1 flex-col">
+          <div className="sheet">
+            <div className="sheet-actions">
               <button
                 type="button"
                 title={copied ? "Copied" : "Copy text"}
                 aria-label={copied ? "Copied" : "Copy text"}
                 disabled={!state.text}
                 onClick={copyText}
-                className={insetIconBtn}
+                className="icon-btn"
               >
                 <IconCopy className="h-4 w-4" />
               </button>
@@ -348,7 +320,7 @@ export default function SessionPage() {
                 aria-label="Clear text"
                 disabled={!state.text}
                 onClick={onDeleteText}
-                className={insetIconBtn}
+                className="icon-btn"
               >
                 <IconTrash className="h-4 w-4" />
               </button>
@@ -360,12 +332,9 @@ export default function SessionPage() {
                 onChange={(e) => onTextChange(e.target.value)}
                 placeholder="Paste a Cursor answer, prompt, or markdown…"
                 spellCheck={false}
-                className="min-h-0 flex-1 resize-none border-0 bg-transparent px-4 py-4 pb-[var(--session-inset-pad)] font-mono text-sm leading-relaxed text-stone-100 outline-none focus:ring-0"
               />
             ) : (
-              <div
-                className="session-scroll min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-4 py-4 pb-[var(--session-inset-pad)]"
-              >
+              <div className="session-scroll min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-5 py-5 pb-[var(--session-inset-pad)]">
                 <MarkdownPreview content={state.text} />
               </div>
             )}

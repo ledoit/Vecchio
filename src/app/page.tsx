@@ -86,118 +86,113 @@ export default function HomePage() {
   );
 
   return (
-    <main className="flex h-dvh max-h-dvh flex-col items-center justify-center overflow-y-auto overscroll-none bg-stone-900 px-4 py-10">
-      <div className="w-full max-w-md space-y-8 text-center">
+    <main className="desk-home">
+      <aside className="atmosphere" aria-hidden>
+        <div className="folio">
+          <p className="kicker folio-kicker">The page is the room</p>
+          <p className="folio-lines">
+            {`Prompts, notes, a draft —
+open the same page on the other
+machine. Equal seats. No host.`}
+          </p>
+        </div>
+      </aside>
+
+      <section className="join">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight text-stone-100">
-            Vecchio
-          </h1>
-          <p className="mt-2 text-stone-400">
-            Shared text across devices. Unpinned rooms clear after 5 minutes
-            empty; pinned rooms stay on the home page and never auto-clear.
+          <p className="kicker">Shared page</p>
+          <h1 className="wordmark join-title">Vecchio</h1>
+          <p className="join-lead">
+            Anyone with the code can write — even without an account. Unpinned
+            pages clear after five minutes empty; pinned pages stay in this
+            index and never auto-clear.
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={createSession}
-          className="w-full rounded-xl bg-stone-600 py-3 text-lg font-semibold text-stone-50 hover:bg-stone-500"
-        >
-          Create session
+        <button type="button" onClick={createSession} className="btn-ink w-full py-2.5 text-[0.95rem]">
+          Start a page
         </button>
 
-        <div className="space-y-3 rounded-xl border border-stone-700 bg-stone-950 p-4">
-          <label
-            htmlFor="code"
-            className="block text-left text-sm text-stone-400"
-          >
-            Session code
+        <div>
+          <label htmlFor="code" className="field-label">
+            Access code
           </label>
           <input
             id="code"
             value={joinCode}
-            onChange={(e) =>
-              setJoinCode(normalizeSessionCode(e.target.value))
-            }
+            onChange={(e) => setJoinCode(normalizeSessionCode(e.target.value))}
             maxLength={4}
             placeholder="ABCD"
-            className="w-full rounded-lg border border-stone-600 bg-stone-900 px-4 py-3 text-center font-mono text-2xl tracking-[0.4em] text-stone-100 uppercase outline-none focus:border-stone-400"
+            autoComplete="off"
+            spellCheck={false}
+            className="field code-input"
             onKeyDown={(e) => {
               if (e.key === "Enter") joinSession();
             }}
           />
-          {error && !selectedPinned && (
-            <p className="text-left text-sm text-red-400">{error}</p>
-          )}
+          {error && !selectedPinned && <p className="err mt-2">{error}</p>}
           <button
             type="button"
             onClick={joinSession}
-            className="w-full rounded-lg border border-stone-600 py-2.5 text-sm font-medium text-stone-100 hover:bg-stone-800"
+            className="btn-ghost mt-3 w-full py-2 text-sm"
           >
-            Join session
+            Enter
           </button>
         </div>
 
         {pinnedCodes.length === 0 && (
-          <p className="text-center text-xs text-stone-600">
-            No pinned sessions yet. Pin a room from its toolbar (local dev: run{" "}
-            <code className="text-stone-500">pnpm dev</code> so PartyKit registry
-            works).
+          <p className="hint">
+            No pinned pages yet. Pin from the page toolbar (local:{" "}
+            <code className="type">pnpm dev</code> so the registry runs).
           </p>
         )}
 
         {pinnedCodes.length > 0 && (
-          <div className="space-y-3 rounded-xl border border-amber-900/40 bg-stone-950 p-4 text-left">
-            <p className="text-sm font-medium text-amber-200/90">
-              Pinned sessions
-            </p>
-            <p className="text-xs text-stone-500">
-              Pinned rooms need a PIN to open (from here or via the room link).
-            </p>
-            <ul className="flex flex-wrap gap-2">
+          <div className="ledger">
+            <p className="kicker">Pinned pages</p>
+            <p className="hint">Kept pages need the PIN to open from here or the link.</p>
+            <div className="ledger-row">
               {pinnedCodes.map((code) => (
-                <li key={code}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedPinned(code);
-                      setPinnedPin("");
-                      setError(null);
-                    }}
-                    className={`rounded-lg border px-3 py-1.5 font-mono text-sm tracking-widest ${
-                      selectedPinned === code
-                        ? "border-amber-600 bg-amber-950/50 text-amber-100"
-                        : "border-stone-600 text-stone-300 hover:bg-stone-800"
-                    }`}
-                  >
-                    {code}
-                  </button>
-                </li>
+                <button
+                  key={code}
+                  type="button"
+                  aria-pressed={selectedPinned === code}
+                  onClick={() => {
+                    setSelectedPinned(code);
+                    setPinnedPin("");
+                    setError(null);
+                  }}
+                  className="ledger-code"
+                >
+                  {code}
+                </button>
               ))}
-            </ul>
+            </div>
             {selectedPinned && (
-              <div className="flex flex-col gap-2 pt-1">
+              <div className="mt-2 flex flex-col gap-2">
+                <label htmlFor="pinned-pin" className="field-label">
+                  PIN for {selectedPinned}
+                </label>
                 <input
+                  id="pinned-pin"
                   ref={pinnedPinInputRef}
                   type="password"
                   inputMode="numeric"
                   maxLength={4}
                   value={pinnedPin}
                   onChange={(e) => setPinnedPin(normalizePin(e.target.value))}
-                  placeholder="PIN"
-                  className="w-full rounded-lg border border-stone-600 bg-stone-900 px-4 py-2 text-center font-mono text-xl tracking-[0.5em] text-stone-100 outline-none focus:border-stone-400"
+                  placeholder="••••"
+                  className="field pin-input"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") void openPinned(selectedPinned);
                   }}
                 />
-                {error && (
-                  <p className="text-sm text-red-400">{error}</p>
-                )}
+                {error && <p className="err">{error}</p>}
                 <button
                   type="button"
                   disabled={pinnedLoading || !isValidPin(normalizePin(pinnedPin))}
                   onClick={() => void openPinned(selectedPinned)}
-                  className="w-full rounded-lg bg-amber-800/80 py-2 text-sm font-medium text-amber-50 hover:bg-amber-700/80 disabled:opacity-40"
+                  className="btn-ink w-full py-2 text-sm"
                 >
                   {pinnedLoading ? "Checking…" : `Open ${selectedPinned}`}
                 </button>
@@ -205,7 +200,7 @@ export default function HomePage() {
             )}
           </div>
         )}
-      </div>
+      </section>
     </main>
   );
 }

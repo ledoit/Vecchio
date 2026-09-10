@@ -213,7 +213,7 @@ export default function SessionPage() {
           type="button"
           title={state.pinned ? "Unpin (keeps on home, no auto-clear)" : "Pin to home"}
           aria-label={state.pinned ? "Unpin session" : "Pin session"}
-          aria-pressed={showPinForm}
+          aria-expanded={showPinForm}
           onClick={() => setShowPinForm((v) => !v)}
           className={`icon-btn ${state.pinned ? "is-on" : ""}`}
         >

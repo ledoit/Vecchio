@@ -1,25 +1,34 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Courier_Prime, EB_Garamond, Figtree } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const garamond = EB_Garamond({
+  variable: "--font-eb-garamond",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const figtree = Figtree({
+  variable: "--font-figtree",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const courier = Courier_Prime({
+  variable: "--font-courier-prime",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Vecchio shared text session",
+  title: "Vecchio — shared page",
   description:
-    "Live-synced text across your devices. Share prompts, notes, and clipboard-sized state with a short session code.",
+    "A shared page across your devices. Anyone with the four-character code can write — no account.",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#1c1917",
+  themeColor: "#1a120c",
 };
 
 export default function RootLayout({
@@ -30,7 +39,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="overscroll-none">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased overscroll-none`}
+        className={`${garamond.variable} ${figtree.variable} ${courier.variable} antialiased overscroll-none`}
       >
         {children}
       </body>

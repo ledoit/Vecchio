@@ -2,6 +2,8 @@
 
 Live-synced **text** across your devices — Menhir **Concurrency** line. Same session-code pattern as Strob: create a 4-character room, open it on Mac, Windows, or iOS Safari, and edit one shared textarea (prompts, notes, clipboard-sized state).
 
+**Bookmark:** [https://vecchio-menhir-holdings.vercel.app](https://vecchio-menhir-holdings.vercel.app)
+
 ## Stack
 
 - **Next.js** (App Router) on **Vercel** (free hobby tier)

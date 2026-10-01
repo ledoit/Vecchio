@@ -1,8 +1,8 @@
 # Vecchio
 
-Live-synced **text** across your devices — Menhir **Concurrency** line. Same session-code pattern as Strob: create a 4-character room, open it on Mac, Windows, or iOS Safari, and edit one shared textarea (prompts, notes, clipboard-sized state).
+Live-synced **text** across your devices. Same session-code pattern as Strob: create a 4-character room, open it on Mac, Windows, or iOS Safari, and edit one shared textarea (prompts, notes, clipboard-sized state).
 
-**Bookmark:** [https://vecchio-menhir-holdings.vercel.app](https://vecchio-menhir-holdings.vercel.app)
+**Bookmark:** [https://vecchio.koalasalmon.com](https://vecchio.koalasalmon.com)
 
 ## Stack
 
@@ -15,7 +15,7 @@ Photos and richer state can layer on later (Blob, Supabase, etc.). v1 is text on
 ## Develop
 
 ```bash
-cd Menhir/Concurrency/Vecchio
+cd Concurrency/Vecchio
 pnpm install
 cp .env.example .env.local
 pnpm dev
@@ -40,7 +40,7 @@ CLI: `pnpm vercel link` then `pnpm vercel:prod`.
 
 - Works on **Mac, Windows, and iOS** without separate builds or app-store friction.
 - **PWA-ready** — add to home screen on iOS for a pseudo-app.
-- Strob already proves this stack in Menhir; Vecchio drops controller/viewer split so every peer is equal (good for moving AI prompts between machines).
+- Strob already proves this stack; Vecchio drops controller/viewer split so every peer is equal (good for moving AI prompts between machines).
 
 A native menubar clip sync tool could be a future complement; it would not replace “open this code on the iPad” as cleanly as a URL.
 
@@ -51,4 +51,4 @@ Sessions are **unlisted, not secret**: anyone who guesses or sees the 4-characte
 
 ## License
 
-All Rights Reserved © Menhir Holdings
+All Rights Reserved © Philippe Ledoit
